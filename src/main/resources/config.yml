@@ -1,0 +1,53 @@
+# The version is to help determine which version this config is. Please don't modify this value.
+version: "@version@"
+
+# Print additional information in the console. Useful for figuring out errors and issues.
+debug: false
+
+general:
+    # The max amount of new lines a user is allowed to enter in inputtable placeholders.
+    new-lines: 4
+
+# Every update configurations will be reset to the new configurations of the version.
+# This is better to have enabled as it keeps configurations up to date.
+# If the new update adds more configuration nodes they will be present.
+# We will usally tell you which configuration nodes were added.
+# The downside is that it resets the values and saves them in their own folder.
+# which you would then have to copy and paste old nodes back into.
+disable-configurations-reset: false
+
+database:
+    # Types are MYSQL and H2.
+    type: "H2"
+    autosave: "5 minutes"
+    # Table name configuration for databases.
+    mines-table: "Mines"
+    mysql:
+        user: "root"
+        password: "password"
+        address: "localhost"
+        name: "mines-example"
+
+# All configurations relating to HolographicDisplays.
+# In order for holograms to be active, you need to install ProtocolLib and HolographicDisplays.
+holograms:
+    turret-disabled:
+        use-sounds: true
+        sounds:
+            1:
+                sound: "BLOCK_FIRE_EXTINGUISH"
+                volume: 1
+                pitch: 1
+                delay: 0
+        x-offset: 0.0
+        y-offset: 0.5
+        z-offset: 0.0
+        item:
+            enabled: false
+            # If the item should be above or below the text.
+            above: false
+            material: "DIAMOND_SWORD"
+            material-meta: ""
+        lines:
+            - "&c&lTurret disabled!"
+            - "&fTime remaining: %time%"

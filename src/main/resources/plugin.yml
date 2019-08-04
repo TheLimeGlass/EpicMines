@@ -1,0 +1,21 @@
+name: EpicMines
+description: The most epic plugin to manage and handle your prison mines!
+authors: [LimeGlass]
+main: me.limeglass.epicmines.EpicMines
+version: @version@
+api-version: 1.13
+softdepend: [PlaceholderAPI, Citizens, Citizens2, Vault, HolographicDisplays]
+commands:
+  epicmines:
+    description: View information on the EpicMines plugin.
+    default: true
+    aliases: [mines, em, epicmines]
+    usage: /em
+permissions:
+  epicmines.*:
+    description: Gives access to all EpicMines commands.
+    children:
+      epicmines.use: true
+  epicmines.use:
+    description: Gives access to view the epicmines command.
+    default: not op

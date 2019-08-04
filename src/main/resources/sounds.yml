@@ -1,0 +1,35 @@
+# The version is to help determine which version this config is. Please don't modify this value.
+version: "@version@"
+
+# All sounds relating to invading.
+# Pitches range from 0-15, any number after just recycles back to 0. (Minecraft 16 decimal pitches)
+# Volumes range from 0-1 (The single decimal place is what is considered), this may change in future versions of Spigot so play with this.
+# All sounds relating to setup
+setup:
+    # When a player enters setup mode.
+    enter:
+        enabled: true
+        # The list of sounds.
+        sounds:
+            1:
+                sound: "BLOCK_NOTE_BLOCK_PLING"
+                volume: 0.7
+                pitch: 3
+                delay: 0
+            # An example of multiple sounds playing.
+            #2:
+            #    sound: "ENTITY_VILLAGER_NO"
+            #    volume: 1
+            #    pitch: 15
+            #    # Will be played 5 ticks after sound 1.)
+            #    delay: 5
+
+# Error sound effect
+error:
+    enabled: true
+    sounds:
+        1:
+            sound: "ENTITY_VILLAGER_NO"
+            volume: 1
+            pitch: 2
+            delay: 0

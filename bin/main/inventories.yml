@@ -1,0 +1,10 @@
+# The version is to help determine which version this config is. Please don't modify this value.
+version: "@version@"
+
+# All configurations relating to inventories.
+inventories:
+    setup:
+        name-anvil:
+            title: "Type Name Here..."
+            material: "PAPER"
+            glowing: true

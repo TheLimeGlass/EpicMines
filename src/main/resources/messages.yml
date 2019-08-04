@@ -1,0 +1,81 @@
+# The version is to help determine which version this config is. Please don't modify this value.
+version: "@version@"
+
+# Information: Placeholders that are available for each message will be commented above it.
+# Default placeholders that exist on every message are %prefix% and %newline%/%nl%
+# Placeholders that if their object is found at the time of the message will be present: %player%, %sender% and %string% - sender being the user the message is sending too.
+
+# All command and general messages.
+messages:
+    # The main prefix for all chat messages.
+    prefix: "&7[&3EpicMines&7] &r"
+    must-be-player: "&cYou must be a player to use this command."
+    # When a player has no permissions to perform an action.
+    no-permission: "&cYou do not have permission to do that."
+    command-doesnt-exist: "&7The command you entered does not exist or is spelt incorrectly."
+    # Called when a command is entered incorrectly.
+    # This and invalid-command-correction are called at same time.
+    invalid-command: "&cInvalid Command!"
+    invalid-command-correction: "&c&7The valid syntax is: &b%command%&7."
+    version: "&3%version% &7<> = required [] = optional"
+
+# The setup command messages
+setup:
+    1:
+        - "&eYou have entered setup mode."
+        - "&3Type &c/em setup quit&3 anytime, to cancel this mine setup."
+        - "&3Enter the name of this Mine into the anvil and click the newly named item."
+    2:
+        - "&eYou set the name to &l%name%"
+        - "&3Now use &e/em setup pos1&3 and look at a block to set position 1 of this mine."
+        - "&7&oYou're tring to make a cuboid with two positions."
+    3:
+        - "&3Now use &e/em setup pos2&3 and look at a block to set position 2 of this mine."
+        - "&7&oYou're tring to make a cuboid with two positions."
+    4:
+        - "&3Now use &e/em setup teleport&3 the teleport location will be at your player's location for this mine."
+    5:
+        - "&3Now use &e/em set %name% <material>:<percent>%...&3 the teleport location will be at your player's location for this mine."
+    quit: "&cYou have quit the setup."
+    pos1: "&eYou just set position one's location to &l%position1%"
+    pos2: "&eYou just set position two's location to &l%position2%"
+    teleport: "&eYou just set the teleport location to &l%teleport%"
+    no-spaces: "&cThe Mine's initial name in setup cannot contain spaces."
+
+flags:
+    delay-error: "&cThe number &l%input% &cis not a valid number."
+    delay-set: "&aYou have set the reset delay of this mine to &e%input% seconds&a."
+    warning: "&eMine &6%name% &ewill reset in &l%timeleft% &eseconds!"
+    warnings-set: "&aYou set the warnings at &e%warnings% &afor the mine &l%name%&a."
+    warnings-error: "&cThe number &l%input% &cis not a valid number."
+    warning-info: "&eWarnings for Mine %name% are currently &6%warnings%"
+    command:
+        - "&7To manage flags on mines, the command is:"
+        - "   &e/em flag <mine> set/remove/info <flag> [flag-arguments]"
+        - "   &7Example: &8&o/em flag Example set warnings 30 5 4 3 2 1"
+        - ""
+        - "&7A list of mine-flags with descriptions follows;"
+    flag: "   &f%flag% %usage% &8- &7%description%"
+    on-mine: "&eMine %name% currently has %flags%. &6/em flag %name% <flag> info &eTo view info on a flag."
+    no-flag-found: "&cThere was no flag found named &l%input%&c."
+    delay-info: "&eThe current delay for Mine %name% is &6%delay% seconds&e."
+    flag-remove: "&cThe flag %flag% has been removed from Mine %name%"
+
+mines:
+    no-mine-found: "&cThere was no mine found named &l%input%&c."
+    no-flag: "&cMine &l%name% &cdoes not have flag &l%input% &cattached to it."
+
+# All messages relating to commands.
+commands:
+    epicmines:
+        description: "Display the main page."
+        syntax: "/em"
+    admin:
+        description: "View admin commands."
+        syntax: "&c/em admin"
+    setup:
+        description: "Setup a new Mine."
+        syntax: "&c/em setup"
+    flags:
+        description: "View, add or remove flags from Mines."
+        syntax: "&c/em flags"
