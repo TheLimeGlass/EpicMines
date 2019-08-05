@@ -10,6 +10,7 @@ import com.google.gson.JsonSerializationContext;
 
 import me.limeglass.epicmines.objects.Mine;
 import me.limeglass.epicmines.utils.MessageBuilder;
+import me.limeglass.epicmines.utils.SoundPlayer;
 
 public class DelayFlag extends MineFlag {
 
@@ -33,12 +34,16 @@ public class DelayFlag extends MineFlag {
 
 	@Override
 	public boolean onAttach(Player player, Mine mine, String[] arguments) {
-		int value = Integer.parseInt(arguments[0]);
+		int value = 0;
+		try {
+			value = Integer.parseInt(arguments[0]);
+		} catch (NumberFormatException e) {}
 		if (value <= 0) {
 			new MessageBuilder("flags.delay-error")
 					.setPlaceholderObject(player)
 					.replace("%input%", value)
 					.send(player);
+			new SoundPlayer("error").playTo(player);
 			return false;
 		}
 		this.seconds = value;

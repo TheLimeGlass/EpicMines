@@ -16,7 +16,7 @@ import me.limeglass.epicmines.EpicMines;
 
 public class SoundPlayer {
 
-	private final Set<UltimateSound> sounds = new HashSet<>();
+	private final Set<EpicSound> sounds = new HashSet<>();
 
 	public SoundPlayer(String node) {
 		this(EpicMines.getInstance().getConfiguration("sounds").get().getConfigurationSection(node));
@@ -27,17 +27,17 @@ public class SoundPlayer {
 			return;
 		section = section.getConfigurationSection("sounds");
 		for (String node : section.getKeys(false)) {
-			this.sounds.add(new UltimateSound(section.getConfigurationSection(node), "CLICK"));
+			this.sounds.add(new EpicSound(section.getConfigurationSection(node), "CLICK"));
 		}
 	}
 
-	public SoundPlayer(Collection<UltimateSound> sounds) {
+	public SoundPlayer(Collection<EpicSound> sounds) {
 		this.sounds.addAll(sounds);
 	}
 
-	private List<UltimateSound> getSorted() {
+	private List<EpicSound> getSorted() {
 		return sounds.parallelStream()
-				.sorted(Comparator.comparing(UltimateSound::getDelay))
+				.sorted(Comparator.comparing(EpicSound::getDelay))
 				.collect(Collectors.toList());
 	}
 
@@ -45,7 +45,7 @@ public class SoundPlayer {
 		if (sounds.isEmpty())
 			return;
 		EpicMines instance = EpicMines.getInstance();
-		for (UltimateSound sound : getSorted()) {
+		for (EpicSound sound : getSorted()) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
 				@Override
 				public void run() {
@@ -59,7 +59,7 @@ public class SoundPlayer {
 		if (sounds.isEmpty())
 			return;
 		EpicMines instance = EpicMines.getInstance();
-		for (UltimateSound sound : getSorted()) {
+		for (EpicSound sound : getSorted()) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
 				@Override
 				public void run() {

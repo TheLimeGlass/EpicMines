@@ -89,6 +89,14 @@ public class SetCommand extends AdminCommand {
 							.send(player);
 					successful = false;
 					break;
+				case BLOCK:
+					new MessageBuilder("mines.errors.not-block")
+							.replace("%material%", result.getMaterial())
+							.replace("%input%", entry.getKey())
+							.setPlaceholderObject(mine)
+							.send(player);
+					successful = false;
+					break;
 				case SUCCESS:
 					break;
 			}

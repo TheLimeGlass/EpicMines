@@ -69,9 +69,10 @@ mines:
     not-set: "&cThe mine %mine% has no blocks currently. &8Example: /em set Test stone:50%,diamond_ore:50%"
     set: "&aYou set Mine %name%'s blocks to &e%blocks%&a."
     errors:
-        material: "&cThe material &l%material% &cdoesn't exist from '%input%' \nmaterials: \nhttps://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html"
+        material: "&cThe material &l%material% &cdoesn't exist from '%input%' materials: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html"
         chance: "&cThe number &l%chance% &cmust be greater than 0 and less than 100 from '%input%'"
         syntax: "&cThe input '%input%' must be seperated by a colon ':' &8&oExample: stone:50%,diamond_ore:50%"
+        not-block: "&c&l%material% &cis not a block, it's an item. &8If an ore block try example: 'diamond ore'"
 
 # All messages relating to commands.
 commands:

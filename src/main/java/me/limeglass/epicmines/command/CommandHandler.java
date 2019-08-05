@@ -14,6 +14,7 @@ import me.limeglass.epicmines.EpicMines;
 import me.limeglass.epicmines.command.AbstractCommand.ReturnType;
 import me.limeglass.epicmines.command.commands.EpicMinesCommand;
 import me.limeglass.epicmines.utils.MessageBuilder;
+import me.limeglass.epicmines.utils.SoundPlayer;
 import me.limeglass.epicmines.utils.Utils;
 
 public class CommandHandler implements CommandExecutor {
@@ -76,6 +77,8 @@ public class CommandHandler implements CommandExecutor {
 				 		.setPlaceholderObject(sender)
 				 		.send(sender);
 			}
+			if (returnType != ReturnType.SUCCESS && sender instanceof Player)
+				new SoundPlayer("error").playTo((Player) sender);
 			return;
 		}
 		new MessageBuilder("messages.no-permission").send(sender);

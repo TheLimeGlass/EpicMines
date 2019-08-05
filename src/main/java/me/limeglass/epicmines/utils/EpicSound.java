@@ -5,14 +5,14 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-public class UltimateSound {
+public class EpicSound {
 	
 	private final float pitch, volume;
 	private final boolean enabled;
 	private final Sound sound;
 	private final int delay;
 	
-	public UltimateSound(ConfigurationSection section, String fallback) {
+	public EpicSound(ConfigurationSection section, String fallback) {
 		String name = section.getString("sound", "ENTITY_PLAYER_LEVELUP");
 		this.sound = Utils.soundAttempt(name, fallback);
 		this.volume = (float) section.getDouble("volume", 1);
@@ -21,7 +21,7 @@ public class UltimateSound {
 		this.delay = section.getInt("delay", 0);
 	}
 	
-	public UltimateSound(Sound sound, float pitch, float volume, boolean enabled) {
+	public EpicSound(Sound sound, float pitch, float volume, boolean enabled) {
 		this.enabled = enabled;
 		this.volume = volume;
 		this.sound = sound;

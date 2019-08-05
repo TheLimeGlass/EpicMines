@@ -55,10 +55,11 @@ public class SetupManager extends Manager {
 				.build();
 		new AnvilMenu(search, player, name -> {
 			if (name.contains(" ")) {
-				new ListMessageBuilder("setup.no-spaces")
+				new MessageBuilder("setup.no-spaces")
 						.setPlaceholderObject(player)
 						.replace("%name%", name)
 						.send(player);
+				new SoundPlayer("error").playTo(player);
 				return;
 			}
 			setups.add(setup);

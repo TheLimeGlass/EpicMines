@@ -132,7 +132,7 @@ public class MineManager extends Manager {
 				.collect(Collectors.toSet());
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onChunkLoad(ChunkLoadEvent event) {
 		Chunk chunk = event.getChunk();
 		database.getKeys().parallelStream()
@@ -141,7 +141,7 @@ public class MineManager extends Manager {
 				.forEach(mine -> mines.add(mine));
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onChunkUnload(ChunkUnloadEvent event) {
 		getMines(event.getChunk()).stream()
 				.filter(mine -> mine.getChunks().stream().anyMatch(chunk -> chunk.isLoaded()))

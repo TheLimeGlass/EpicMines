@@ -36,6 +36,10 @@ public class SetParser {
 				results.put(element, new ParseResult(Type.MATERIAL).setInput(parse[0]));
 				continue;
 			}
+			if (!material.isBlock()) {
+				results.put(element, new ParseResult(Type.BLOCK).setMaterial(material).setInput(parse[0]));
+				continue;
+			}
 			double chance;
 			try {
 				chance = Double.parseDouble(parse[1].replaceAll(Pattern.quote("%"), ""));
@@ -59,7 +63,8 @@ public class SetParser {
 		SYNTAX_ERROR,
 		MATERIAL,
 		SUCCESS,
-		NUMBER;
+		NUMBER,
+		BLOCK;
 	}
 
 	public class ParseResult {

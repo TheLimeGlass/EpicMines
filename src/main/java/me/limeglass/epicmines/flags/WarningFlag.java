@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import me.limeglass.epicmines.objects.Mine;
 import me.limeglass.epicmines.utils.MessageBuilder;
+import me.limeglass.epicmines.utils.SoundPlayer;
 
 public class WarningFlag extends MineFlag {
 
@@ -48,12 +49,16 @@ public class WarningFlag extends MineFlag {
 	public boolean onAttach(Player player, Mine mine, String[] arguments) {
 		Set<Integer> values = new HashSet<>();
 		for (String warning : arguments) {
-			int value = Integer.parseInt(warning);
+			int value = 0;
+			try {
+				value = Integer.parseInt(warning);
+			} catch (NumberFormatException e) {}
 			if (value <= 0) {
 				new MessageBuilder("flags.warnings-error")
 						.setPlaceholderObject(player)
 						.replace("%input%", value)
 						.send(player);
+				new SoundPlayer("error").playTo(player);
 				return false;
 			}
 			values.add(value);
