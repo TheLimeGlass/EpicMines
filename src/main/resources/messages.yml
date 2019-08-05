@@ -41,6 +41,7 @@ setup:
     pos2: "&eYou just set position two's location to &l%position2%"
     teleport: "&eYou just set the teleport location to &l%teleport%"
     no-spaces: "&cThe Mine's initial name in setup cannot contain spaces."
+    not-in-setup: "&cYou are currently not in a setup. Type &l/em setup &cto start."
 
 flags:
     delay-error: "&cThe number &l%input% &cis not a valid number."
@@ -64,6 +65,13 @@ flags:
 mines:
     no-mine-found: "&cThere was no mine found named &l%input%&c."
     no-flag: "&cMine &l%name% &cdoes not have flag &l%input% &cattached to it."
+    set-info: "&aMine %name% contains &e%blocks%&a."
+    not-set: "&cThe mine %mine% has no blocks currently. &8Example: /em set Test stone:50%,diamond_ore:50%"
+    set: "&aYou set Mine %name%'s blocks to &e%blocks%&a."
+    errors:
+        material: "&cThe material &l%material% &cdoesn't exist from '%input%' \nmaterials: \nhttps://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html"
+        chance: "&cThe number &l%chance% &cmust be greater than 0 and less than 100 from '%input%'"
+        syntax: "&cThe input '%input%' must be seperated by a colon ':' &8&oExample: stone:50%,diamond_ore:50%"
 
 # All messages relating to commands.
 commands:
@@ -79,3 +87,6 @@ commands:
     flags:
         description: "View, add or remove flags from Mines."
         syntax: "&c/em flags"
+    set:
+        description: "Set, or modify blocks from Mines."
+        syntax: "&c/em set/view <mine> [<material>:<percent>%]..."

@@ -64,9 +64,9 @@ public class MineManager extends Manager {
 						reset = true;
 				}
 				if (reset)
-					resetMine(mine);
+					mine.reset();
 			}
-		}, 0, 20);
+		}, 0, 16);
 	}
 
 	public void save() {
@@ -130,11 +130,6 @@ public class MineManager extends Manager {
 		return mines.stream()
 				.filter(mine -> mine.isWithin(location))
 				.collect(Collectors.toSet());
-	}
-
-	public void resetMine(Mine mine) {
-		mine.update();
-		//TODO
 	}
 
 	@EventHandler

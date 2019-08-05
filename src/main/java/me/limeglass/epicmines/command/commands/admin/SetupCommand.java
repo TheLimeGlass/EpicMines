@@ -24,6 +24,12 @@ public class SetupCommand extends AdminCommand {
 		SetupManager manager = EpicMines.getInstance().getManager(SetupManager.class);
 		Optional<Setup> optional = manager.getSetup(player);
 		if (!optional.isPresent()) {
+			if (arguments.length != 0) {
+				new MessageBuilder("setup.not-in-setup")
+						.setPlaceholderObject(player)
+						.send(player);
+				return ReturnType.FAILURE;
+			}
 			manager.enterSetup(player);
 			return ReturnType.SUCCESS;
 		}
@@ -63,6 +69,8 @@ public class SetupCommand extends AdminCommand {
 						.send(player);
 				manager.quit(player);
 				break;
+			default:
+				return ReturnType.SYNTAX_ERROR;
 		}
 		return ReturnType.SUCCESS;
 	}

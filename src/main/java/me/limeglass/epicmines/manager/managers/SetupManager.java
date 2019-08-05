@@ -38,7 +38,7 @@ public class SetupManager extends Manager {
 	}
 
 	public void finish(Setup setup) {
-		Mine mine = new Mine(setup.getName(), setup.getLocation("pos1").get(), setup.getLocation("pos2").get());
+		Mine mine = new Mine(setup.getName(), setup.getLocation("pos1").get(), setup.getLocation("pos2").get(), setup.getLocation("teleport").get());
 		EpicMines.getInstance().getManager(MineManager.class).getMines().add(mine);
 		setups.remove(setup);
 	}

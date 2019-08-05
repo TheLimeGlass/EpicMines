@@ -22,9 +22,6 @@ public class DelayFlag extends MineFlag {
 	@Override
 	public void tick(Mine mine) {}
 
-	@Override
-	public void onReset(Mine mine) {}
-
 	// Already calculated within the getTimeLeft() method.
 	@Override
 	public boolean canReset(Mine mine) {

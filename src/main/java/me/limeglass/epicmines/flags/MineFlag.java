@@ -1,9 +1,14 @@
 package me.limeglass.epicmines.flags;
 
 import java.lang.reflect.Type;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Consumer;
 
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.util.Vector;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -12,6 +17,7 @@ import com.google.gson.JsonSerializationContext;
 
 import me.limeglass.epicmines.database.Serializer;
 import me.limeglass.epicmines.objects.Mine;
+import me.limeglass.epicmines.objects.ResetInfo.BlockChance;
 
 public abstract class MineFlag implements Serializer<MineFlag> {
 
@@ -55,19 +61,34 @@ public abstract class MineFlag implements Serializer<MineFlag> {
 	public abstract void tick(Mine mine);
 
 	/**
-	 * Called when a mine resets.
+	 * Called when a mine resets. Override to control what happens during a reset.
+	 * @see #modify(Vector,Vector) to modify the iterator.
 	 * 
 	 * @param mine Mine involved.
 	 */
-	public abstract void onReset(Mine mine);
+	public Consumer<Iterator<Block>> onReset(List<BlockChance> probability, Mine mine) {
+		return null;
+	}
 
 	/**
-	 * Called before a mine resets.
+	 * Override to change the block iterator locations.
+	 * 
+	 * @param min Vector of the lowest point in the cuboid.
+	 * @param max Vector of the highest point in the cuboid.
+	 */
+	public Iterator<Block> modify(Vector min, Vector max) {
+		return null;
+	}
+
+	/**
+	 * Called before a mine resets. Override to be able to change.
 	 * 
 	 * @param mine Mine involved.
 	 * @return boolean if the mine can reset.
 	 */
-	public abstract boolean canReset(Mine mine);
+	public boolean canReset(Mine mine) {
+		return false;
+	}
 
 	/**
 	 * Called when a player breaks a block within the mine with this flag.

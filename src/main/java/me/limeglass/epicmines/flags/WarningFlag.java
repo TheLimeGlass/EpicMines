@@ -20,6 +20,7 @@ public class WarningFlag extends MineFlag {
 
 	private final Set<Integer> warnings = new HashSet<>();
 	private final Gson gson = new Gson();
+	private long last;
 
 	public WarningFlag() {
 		super("warnings", "<seconds> <...>", "Set reset warnings");
@@ -28,21 +29,16 @@ public class WarningFlag extends MineFlag {
 	@Override
 	public void tick(Mine mine) {
 		long left = mine.getTimeLeft();
+		if (last == left)
+			return;
 		for (int warning : warnings) {
 			if (warning != left)
 				continue;
+			last = warning;
 			new MessageBuilder("flags.warning")
 					.setPlaceholderObject(mine)
 					.send(mine.getPlayersAround());
 		}
-	}
-
-	@Override
-	public void onReset(Mine mine) {}
-
-	@Override
-	public boolean canReset(Mine mine) {
-		return false;
 	}
 
 	@Override

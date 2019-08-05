@@ -42,6 +42,16 @@ public class DefaultPlaceholders {
 				return Math.round(location.getX()) + ", " + Math.round(location.getY()) + ", " + Math.round(location.getZ());
 			}
 		});
+		Placeholders.registerPlaceholder(new Placeholder<Setup>("%teleport%") {
+			@Override
+			public String replace(Setup setup) {
+				Optional<Location> teleport = setup.getLocation("teleport");
+				if (!teleport.isPresent())
+					return null;
+				Location location = teleport.get();
+				return Math.round(location.getX()) + ", " + Math.round(location.getY()) + ", " + Math.round(location.getZ());
+			}
+		});
 		Placeholders.registerPlaceholder(new Placeholder<Setup>("%player%") {
 			@Override
 			public String replace(Setup setup) {

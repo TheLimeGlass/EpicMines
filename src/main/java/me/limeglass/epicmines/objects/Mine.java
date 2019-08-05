@@ -1,5 +1,6 @@
 package me.limeglass.epicmines.objects;
 
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import com.google.common.collect.Sets;
@@ -23,20 +25,39 @@ import me.limeglass.epicmines.utils.MessageBuilder;
 public class Mine {
 
 	private final Set<MineFlag> flags = Sets.newHashSet(new DelayFlag());
+	private final ResetInfo resetInfo = new ResetInfo(this);
 	private long update = System.currentTimeMillis();
-	private final Location pos1, pos2;
+	private final Location pos1, pos2, teleport;
 	private final CuboidRegion region;
 	private final String name;
 
-	public Mine(String name, Location pos1, Location pos2) {
+	public Mine(String name, Location pos1, Location pos2, Location teleport) {
 		this.region = new CuboidRegion(pos1, pos2);
+		this.teleport = teleport;
 		this.name = name;
 		this.pos1 = pos1;
 		this.pos2 = pos2;
 	}
 
+	public void reset() {
+		update();
+		resetInfo.reset();
+	}
+
 	public void update() {
 		update = System.currentTimeMillis();
+	}
+
+	public CuboidRegion getCuboidRegion() {
+		return region.clone();
+	}
+
+	public Iterator<Block> iterator() {
+		return getCuboidRegion().iterator();
+	}
+
+	public ResetInfo getResetInfo() {
+		return resetInfo;
 	}
 
 	public Set<MineFlag> getFlags() {
@@ -49,6 +70,10 @@ public class Mine {
 				.map(flag -> (DelayFlag) flag)
 				.findFirst()
 				.get();
+	}
+
+	public Location getTeleport() {
+		return teleport;
 	}
 
 	public long getTimeLeft() {
@@ -108,7 +133,7 @@ public class Mine {
 	}
 
 	public Set<Chunk> getChunks() {
-		return region.getChunks();
+		return getCuboidRegion().getChunks();
 	}
 
 	public Location getPosition1() {
@@ -134,7 +159,7 @@ public class Mine {
 	}
 
 	public boolean isEmpty() {
-		return Streams.stream(region.iterator()).parallel().allMatch(block -> block.getType() == Material.AIR);
+		return Streams.stream(getCuboidRegion().iterator()).parallel().allMatch(block -> block.getType() == Material.AIR);
 	}
 
 	public Set<Player> getPlayersAround() {
@@ -157,11 +182,11 @@ public class Mine {
 	}
 
 	public boolean isWithin(Location location) {
-		return region.isWithin(location.toVector());
+		return getCuboidRegion().isWithin(location.toVector());
 	}
 
 	public boolean isWithin(Chunk chunk) {
-		return region.isWithin(chunk);
+		return getCuboidRegion().isWithin(chunk);
 	}
 
 }

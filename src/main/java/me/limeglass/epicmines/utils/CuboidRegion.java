@@ -32,6 +32,10 @@ public class CuboidRegion implements Iterable<Block> {
 		this.maxZ = max.getBlockZ();
 	}
 
+	public CuboidRegion clone() {
+		return new CuboidRegion(pos1, pos2);
+	}
+
 	@Override
 	public Iterator<Block> iterator() {
 		return new Iterator<Block>() {
