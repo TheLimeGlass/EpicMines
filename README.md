@@ -11,3 +11,5 @@ The most epic plugin to manage and handle your prison mines!
   - Warnings - Set message warnings for those near the mine.
   - Delay - Set the mines to reset at an interval.
 - Active and helpful team of developers.
+
+https://youtu.be/8eY-M6FW0MA
