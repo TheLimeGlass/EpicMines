@@ -49,6 +49,7 @@ public class WarningFlag extends MineFlag {
 	public boolean onAttach(Player player, Mine mine, String[] arguments) {
 		Set<Integer> values = new HashSet<>();
 		for (String warning : arguments) {
+			warning = warning.replaceAll(",", "");
 			int value = 0;
 			try {
 				value = Integer.parseInt(warning);

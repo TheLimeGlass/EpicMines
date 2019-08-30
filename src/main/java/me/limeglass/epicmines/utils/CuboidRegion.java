@@ -1,25 +1,27 @@
 package me.limeglass.epicmines.utils;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
-import com.google.common.collect.Streams;
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.google.common.collect.Sets;
 
 public class CuboidRegion implements Iterable<Block> {
 
 	private final int maxX, maxY, maxZ;
 	private final Location pos1, pos2;
 	private int nextX, nextY, nextZ;
+	private final World world;
 
 	public CuboidRegion(Location pos1, Location pos2) {
+		world = pos1.getWorld();
 		this.pos1 = pos1;
 		this.pos2 = pos2;
 		Vector min = min();
@@ -81,17 +83,23 @@ public class CuboidRegion implements Iterable<Block> {
 		};
 	}
 
-	public Set<Chunk> getChunks() {
-		return Streams.stream(iterator()).parallel()
-				.map(block -> block.getChunk())
-				.collect(Collectors.toSet());
-	}
-
 	public Vector min() {
 		int x = Math.min(pos1.getBlockX(), pos2.getBlockX());
 		int y = Math.min(pos1.getBlockY(), pos2.getBlockY());
 		int z = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
 		return new Vector(x, y, z);
+	}
+
+	public Set<Chunk> getChunks() {
+		Chunk min = world.getChunkAt(min().toLocation(world));
+		Chunk max = world.getChunkAt(max().toLocation(world));
+		Set<Chunk> chunks = Sets.newHashSet(min, max);
+		for (int x = min.getX(); x < max.getX(); x++) {
+			for (int z = min.getZ(); z < max.getZ(); z++) {
+				chunks.add(world.getChunkAt(x, z));
+			}
+		}
+		return chunks;
 	}
 
 	public Vector max() {
@@ -107,15 +115,7 @@ public class CuboidRegion implements Iterable<Block> {
 		double z = pt.getZ();
 		Vector min = min();
 		Vector max = max();
-		return (x >= min.getBlockX()) && (x <= max.getBlockX()) && (y >= min.getBlockY()) && (y <= max.getBlockY()) && (z >= min.getBlockZ()) && (z <= max.getBlockZ());
-	}
-
-	public boolean isWithin(Chunk chunk) {
-		double x = chunk.getX();
-		double z = chunk.getZ();
-		Vector min = min();
-		Vector max = max();
-		return (x >= min.getBlockX()) && (x <= max.getBlockX()) && (z >= min.getBlockZ()) && (z <= max.getBlockZ());
+		return x >= min.getBlockX() && x <= max.getBlockX() && y >= min.getBlockY() && y <= max.getBlockY() && z >= min.getBlockZ() && z <= max.getBlockZ();
 	}
 
 }

@@ -74,6 +74,7 @@ public class FlagCommand extends AdminCommand {
 			case "info":
 				if (!flag.isPresent()) {
 					new MessageBuilder("mines.no-flag")
+							.replace("%name%", mine.getName())
 							.replace("%input%", arguments[2])
 							.setPlaceholderObject(player)
 							.send(player);
@@ -91,6 +92,7 @@ public class FlagCommand extends AdminCommand {
 			case "edit":
 				if (!flag.isPresent()) {
 					new MessageBuilder("mines.no-flag")
+							.replace("%name%", mine.getName())
 							.replace("%input%", arguments[2])
 							.setPlaceholderObject(player)
 							.send(player);

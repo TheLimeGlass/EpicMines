@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 
 import com.google.common.collect.Maps;
 
+import me.limeglass.epicmines.EpicMines;
 import me.limeglass.epicmines.utils.CuboidRegion;
 
 public class ResetInfo {
@@ -71,6 +72,10 @@ public class ResetInfo {
 	}
 
 	public void reset() {
+		if (EpicMines.getInstance().getConfig().getBoolean("general.cancel-unloaded-chunks-reset", true)) {
+			if (mine.getChunks().stream().allMatch(chunk -> !chunk.isLoaded()))
+				return;
+		}
 		CuboidRegion region = mine.getCuboidRegion();
 		mine.getPlayersWithin().forEach(player -> player.teleport(mine.getTeleport()));
 		List<BlockChance> probability = getProbabilityMap();

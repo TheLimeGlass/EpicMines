@@ -1,5 +1,7 @@
 package me.limeglass.epicmines.objects;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -19,6 +21,7 @@ import me.limeglass.epicmines.EpicMines;
 import me.limeglass.epicmines.flags.DelayFlag;
 import me.limeglass.epicmines.flags.MineFlag;
 import me.limeglass.epicmines.flags.MineFlag.FlagInfo;
+import me.limeglass.epicmines.manager.managers.MineManager;
 import me.limeglass.epicmines.utils.CuboidRegion;
 import me.limeglass.epicmines.utils.MessageBuilder;
 
@@ -26,6 +29,7 @@ public class Mine {
 
 	private final Set<MineFlag> flags = Sets.newHashSet(new DelayFlag());
 	private final ResetInfo resetInfo = new ResetInfo(this);
+	private final Set<Chunk> chunks = new HashSet<>();
 	private long update = System.currentTimeMillis();
 	private final Location pos1, pos2, teleport;
 	private final CuboidRegion region;
@@ -37,11 +41,16 @@ public class Mine {
 		this.name = name;
 		this.pos1 = pos1;
 		this.pos2 = pos2;
+		chunks.addAll(region.getChunks());
 	}
 
 	public void reset() {
 		update();
 		resetInfo.reset();
+	}
+
+	public void unload() {
+		EpicMines.getInstance().getManager(MineManager.class).getMines().remove(this);
 	}
 
 	public void update() {
@@ -60,7 +69,7 @@ public class Mine {
 		return resetInfo;
 	}
 
-	public Set<MineFlag> getFlags() {
+	public Set<? extends MineFlag> getFlags() {
 		return flags;
 	}
 
@@ -84,7 +93,7 @@ public class Mine {
 		return getFlag(info).isPresent();
 	}
 
-	public Optional<MineFlag> getFlag(String name) {
+	public Optional<? extends MineFlag> getFlag(String name) {
 		return flags.stream()
 				.filter(flag -> flag.getName().equalsIgnoreCase(name))
 				.findFirst();
@@ -99,11 +108,11 @@ public class Mine {
 				.findFirst();
 	}
 
-	public void addFlag(Player player, FlagInfo<?> info, String... arguments) {
+	public <F extends MineFlag> void addFlag(Player player, FlagInfo<F> info, String... arguments) {
 		flags.removeIf(flag -> flag.getName().equalsIgnoreCase(info.getName()));
 		Bukkit.getScheduler().runTaskAsynchronously(EpicMines.getInstance(), () -> {
 			try {
-				MineFlag flag = info.getFlagClass().newInstance();
+				F flag = info.getFlagClass().newInstance();
 				if (!flag.onAttach(player, this, arguments))
 					return;
 				flags.add(flag);
@@ -130,10 +139,6 @@ public class Mine {
 
 	public String getName() {
 		return name;
-	}
-
-	public Set<Chunk> getChunks() {
-		return getCuboidRegion().getChunks();
 	}
 
 	public Location getPosition1() {
@@ -182,11 +187,19 @@ public class Mine {
 	}
 
 	public boolean isWithin(Location location) {
-		return getCuboidRegion().isWithin(location.toVector());
+		return region.isWithin(location.toVector());
 	}
 
+	public Set<Chunk> getChunks() {
+		return Collections.unmodifiableSet(chunks);
+	}
+
+	/**
+	 * @param chunk The Chunk to check within.
+	 * @return boolean if it's within.
+	 */
 	public boolean isWithin(Chunk chunk) {
-		return getCuboidRegion().isWithin(chunk);
+		return getChunks().parallelStream().anyMatch(check -> check.getX() == chunk.getX() && check.getZ() == chunk.getZ());
 	}
 
 }

@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 
+import me.limeglass.epicmines.EpicMines;
+
 public class SetParser {
 
 	private final String input;
@@ -18,6 +20,7 @@ public class SetParser {
 	public Map<String, ParseResult> parse() {
 		String[] elements = input.split(Pattern.quote(","));
 		Map<String, ParseResult> results = new HashMap<>();
+		double total = 0;
 		for (String element : elements) {
 			if (element == null)
 				continue;
@@ -36,10 +39,11 @@ public class SetParser {
 				results.put(element, new ParseResult(Type.MATERIAL).setInput(parse[0]));
 				continue;
 			}
-			if (!material.isBlock()) {
-				results.put(element, new ParseResult(Type.BLOCK).setMaterial(material).setInput(parse[0]));
-				continue;
-			}
+			if (!EpicMines.getInstance().getConfig().getBoolean("general.override-block-check", false))
+				if (!material.isBlock() && material != Material.AIR) {
+					results.put(element, new ParseResult(Type.BLOCK).setMaterial(material).setInput(parse[0]));
+					continue;
+				}
 			double chance;
 			try {
 				chance = Double.parseDouble(parse[1].replaceAll(Pattern.quote("%"), ""));
@@ -49,6 +53,11 @@ public class SetParser {
 			}
 			if (chance < 0 || chance > 100) {
 				results.put(element, new ParseResult(Type.NUMBER).setInput(parse[1]));
+				continue;
+			}
+			total += chance;
+			if (total > 100) {
+				results.put(element, new ParseResult(Type.EXCEEDED));
 				continue;
 			}
 			ParseResult success = new ParseResult(Type.SUCCESS);
@@ -61,6 +70,7 @@ public class SetParser {
 
 	public enum Type {
 		SYNTAX_ERROR,
+		EXCEEDED,
 		MATERIAL,
 		SUCCESS,
 		NUMBER,

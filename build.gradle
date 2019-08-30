@@ -65,16 +65,19 @@ dependencies {
 	implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.24-SNAPSHOT')
 
 	// Spigot
-	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.14-R0.1-SNAPSHOT')
+	implementation (group: 'org.spigotmc', name: 'spigot-api', version: '1.14.4-R0.1-SNAPSHOT')
+
+	// Netty
+	implementation (group: 'io.netty', name: 'netty-all', version: '4.1.27.Final')
 
 	// Vault
 	implementation (group: 'net.milkbowl', name: 'vault', version: '1.7.1')
 
-	// EffectLib
-	shade (group: 'de.slikey', name: 'EffectLib', version: '6.2-SNAPSHOT')
-
 	// AnvilGUI
 	shade (group: 'net.wesjd', name: 'anvilgui', version: '1.2.1-SNAPSHOT')
+
+	// EffectLib
+	shade (group: 'de.slikey', name: 'EffectLib', version: '6.2-SNAPSHOT')
 
 	// H2 Database
 	shade (group: 'com.h2database', name: 'h2', version: '1.4.199')

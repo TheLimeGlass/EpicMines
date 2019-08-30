@@ -13,9 +13,12 @@ import com.google.gson.GsonBuilder;
 import me.limeglass.epicmines.database.serializer.ItemStackSerializer;
 import me.limeglass.epicmines.database.serializer.LocationSerializer;
 import me.limeglass.epicmines.database.serializer.MineFlagSerializer;
+import me.limeglass.epicmines.database.serializer.MineSerializer;
 import me.limeglass.epicmines.database.serializer.MineStatisticsSerializer;
 import me.limeglass.epicmines.flags.MineFlag;
+import me.limeglass.epicmines.objects.Mine;
 import me.limeglass.epicmines.objects.MineStatistics;
+import me.limeglass.epicmines.objects.MineStatistics.Enter;
 
 public abstract class Database<T> {
 
@@ -24,10 +27,11 @@ public abstract class Database<T> {
 	public Database(MineFlag... flags) {
 		MineStatisticsSerializer mineStatistics = new MineStatisticsSerializer();
 		GsonBuilder builder = new GsonBuilder()
-				.registerTypeAdapter(Location.class, mineStatistics.new EnterSerializer())
+				.registerTypeAdapter(Enter.class, mineStatistics.new EnterSerializer())
 				.registerTypeAdapter(ItemStack.class, new ItemStackSerializer())
 				.registerTypeAdapter(MineFlag.class, new MineFlagSerializer())
 				.registerTypeAdapter(Location.class, new LocationSerializer())
+				.registerTypeAdapter(Mine.class, new MineSerializer())
 				.registerTypeAdapter(MineStatistics.class, mineStatistics)
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.STATIC)
 				.enableComplexMapKeySerialization()

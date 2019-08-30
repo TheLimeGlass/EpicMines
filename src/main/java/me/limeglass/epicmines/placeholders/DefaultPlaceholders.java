@@ -77,6 +77,13 @@ public class DefaultPlaceholders {
 				return name;
 			}
 		});
+		Placeholders.registerPlaceholder(new Placeholder<Mine>("%teleport%") {
+			@Override
+			public String replace(Mine mine) {
+				Location location = mine.getTeleport();
+				return Math.round(location.getX()) + ", " + Math.round(location.getY()) + ", " + Math.round(location.getZ());
+			}
+		});
 		Placeholders.registerPlaceholder(new Placeholder<Mine>("%name%") {
 			@Override
 			public String replace(Mine mine) {

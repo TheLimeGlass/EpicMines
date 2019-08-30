@@ -124,9 +124,9 @@ public abstract class MineFlag implements Serializer<MineFlag> {
 
 	public class FlagInfo<F extends MineFlag> {
 
-		private final Class<F> clazz;
 		private final String[] description;
 		private final String name, usage;
+		private final Class<F> clazz;
 
 		public FlagInfo(Class<F> clazz, String name, String usage, String... description) {
 			this.description = description;
@@ -135,7 +135,7 @@ public abstract class MineFlag implements Serializer<MineFlag> {
 			this.name = name;
 		}
 
-		public Class<? extends MineFlag> getFlagClass() {
+		public Class<F> getFlagClass() {
 			return clazz;
 		}
 

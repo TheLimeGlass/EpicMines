@@ -68,11 +68,13 @@ mines:
     set-info: "&aMine %name% contains &e%blocks%&a."
     not-set: "&cThe mine %mine% has no blocks currently. &8Example: /em set Test stone:50%,diamond_ore:50%"
     set: "&aYou set Mine %name%'s blocks to &e%blocks%&a."
+    no-mines: "&cThere are no mines to be found. You can enter setup mode by typing &l/em setup"
     errors:
         material: "&cThe material &l%material% &cdoesn't exist from '%input%' materials: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html"
         chance: "&cThe number &l%chance% &cmust be greater than 0 and less than 100 from '%input%'"
         syntax: "&cThe input '%input%' must be seperated by a colon ':' &8&oExample: stone:50%,diamond_ore:50%"
         not-block: "&c&l%material% &cis not a block, it's an item. &8If an ore block try example: 'diamond ore'"
+        exceeded: "&cThe calculated percentage goes above 100%, make sure it all equals 100% or less. (Air fills empty percentage)"
 
 # All messages relating to commands.
 commands:
@@ -91,3 +93,15 @@ commands:
     set:
         description: "Set, or modify blocks from Mines."
         syntax: "&c/em set/view <mine> [<material>:<percent>%]..."
+    list:
+        description: "View all Mines."
+        syntax: "&c/em mines"
+        title: "&8%spot%. &6%name% &7%teleport%&8"
+        hover: "&6&oClick to teleport to Mine &l%name%"
+    teleport:
+        description: "Teleport to Mines."
+        syntax: "&c/em teleport <mine>"
+    reset:
+        description: "Force a mine to reset."
+        syntax: "&c/em reset <mine>"
+        reset: "&eYou have reset mine &l%mine%&e."

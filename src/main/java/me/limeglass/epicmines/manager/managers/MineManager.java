@@ -1,5 +1,6 @@
 package me.limeglass.epicmines.manager.managers;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -9,10 +10,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import com.google.common.collect.Sets;
 
 import me.limeglass.epicmines.EpicMines;
 import me.limeglass.epicmines.database.Database;
@@ -52,9 +52,10 @@ public class MineManager extends Manager {
 			database = getMySQLDatabase(table, Mine.class, flags.toArray(new MineFlag[flags.size()]));
 		else
 			database = getFileDatabase(table, Mine.class, flags.toArray(new MineFlag[flags.size()]));
+		mines.addAll(database.getKeys().stream().map(name -> database.get(name)).collect(Collectors.toSet()));
 		String interval = configuration.getString("database.autosave", "5 miniutes");
 		BukkitScheduler scheduler = Bukkit.getScheduler();
-		scheduler.runTaskTimerAsynchronously(instance, () -> mines.forEach(mine -> database.put(mine.getName(), mine)), 0, IntervalUtils.getInterval(interval) * 20);
+		scheduler.runTaskTimerAsynchronously(instance, () -> save(), 0, IntervalUtils.getInterval(interval) * 20);
 		scheduler.runTaskTimer(instance, () -> {
 			for (Mine mine : mines) {
 				boolean reset = false;
@@ -70,6 +71,9 @@ public class MineManager extends Manager {
 	}
 
 	public void save() {
+		if (mines.isEmpty())
+			return;
+		EpicMines.debugMessage("Saving " + mines.size() + " mines");
 		mines.forEach(mine -> database.put(mine.getName(), mine));
 	}
 
@@ -93,6 +97,16 @@ public class MineManager extends Manager {
 		return mines;
 	}
 
+	public Set<Mine> getAllMines() {
+		Set<Mine> all = Sets.newHashSet(mines);
+		all.addAll(database.getKeys().stream()
+				.map(name -> getMine(name))
+				.filter(optional -> optional.isPresent())
+				.map(optional -> optional.get())
+				.collect(Collectors.toSet()));
+		return all;
+	}
+
 	public Optional<Mine> getMine(String name) {
 		Optional<Mine> optional = mines.stream()
 				.filter(mine -> mine.getName().equalsIgnoreCase(name))
@@ -103,6 +117,8 @@ public class MineManager extends Manager {
 	}
 
 	public Set<Mine> getMines(String... names) {
+		if (names == null || names.length <= 0)
+			return getAllMines();
 		Set<Mine> set = new HashSet<>();
 		for (String name : names)
 			getMine(name).ifPresent(mine -> set.add(mine));
@@ -120,9 +136,10 @@ public class MineManager extends Manager {
 				.get();
 	}
 
-	public Set<Mine> getMines(Chunk chunk) {
+	public Set<Mine> getMines(Chunk... chunks) {
 		return mines.stream()
-				.filter(mine -> mine.isWithin(chunk))
+				.filter(mine -> Arrays.stream(chunks)
+						.anyMatch(chunk -> mine.isWithin(chunk)))
 				.collect(Collectors.toSet());
 	}
 
@@ -130,29 +147,6 @@ public class MineManager extends Manager {
 		return mines.stream()
 				.filter(mine -> mine.isWithin(location))
 				.collect(Collectors.toSet());
-	}
-
-	@EventHandler(ignoreCancelled = true)
-	public void onChunkLoad(ChunkLoadEvent event) {
-		Chunk chunk = event.getChunk();
-		database.getKeys().parallelStream()
-				.map(string -> database.get(string))
-				.filter(mine -> mine.isWithin(chunk))
-				.forEach(mine -> mines.add(mine));
-	}
-
-	@EventHandler(ignoreCancelled = true)
-	public void onChunkUnload(ChunkUnloadEvent event) {
-		getMines(event.getChunk()).stream()
-				.filter(mine -> mine.getChunks().stream().anyMatch(chunk -> chunk.isLoaded()))
-				.forEach(mine -> {
-					database.put(mine.getName(), mine);
-					Bukkit.getScheduler().runTaskLaterAsynchronously(EpicMines.getInstance(), () -> {
-						if (mine.getChunks().stream().anyMatch(chunk -> chunk.isLoaded()))
-							return;
-						mines.remove(mine);
-					}, 20 * 10); //Remove from cache in 10 seconds.
-				});
 	}
 
 }

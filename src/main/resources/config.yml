@@ -7,6 +7,9 @@ debug: false
 general:
     # The max amount of new lines a user is allowed to enter in inputtable placeholders.
     new-lines: 4
+    # If all chunks within the mine are unloaded, should resets be cancelled?
+    # aka no one is near it.
+    cancel-unloaded-chunks-reset: true
 
 # Every update configurations will be reset to the new configurations of the version.
 # This is better to have enabled as it keeps configurations up to date.
@@ -27,6 +30,12 @@ database:
         password: "password"
         address: "localhost"
         name: "mines-example"
+
+general:
+    # Unlocks all items to be used as Mine blocks. Keep in mind, if it's not placeable it will just be air, that's how Minecraft works.
+    # If you think you can find a Material that isn't classified as a block under Spigot and can be placed, you can enable this and experiment.
+    # Disables the parser check for Material being a block in the set command.
+    override-block-check: false
 
 # All configurations relating to HolographicDisplays.
 # In order for holograms to be active, you need to install ProtocolLib and HolographicDisplays.

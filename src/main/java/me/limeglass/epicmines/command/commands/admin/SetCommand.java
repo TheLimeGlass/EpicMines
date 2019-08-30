@@ -97,6 +97,12 @@ public class SetCommand extends AdminCommand {
 							.send(player);
 					successful = false;
 					break;
+				case EXCEEDED:
+					new MessageBuilder("mines.errors.exceeded")
+							.setPlaceholderObject(mine)
+							.send(player);
+					successful = false;
+					return ReturnType.FAILURE;
 				case SUCCESS:
 					break;
 			}
