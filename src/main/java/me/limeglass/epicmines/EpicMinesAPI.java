@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 
+import me.limeglass.epicmines.displays.DisplayStatistic;
 import me.limeglass.epicmines.flags.MineFlag;
 import me.limeglass.epicmines.manager.managers.MineManager;
 import me.limeglass.epicmines.objects.Mine;
@@ -67,8 +68,18 @@ public class EpicMinesAPI {
 	 * @param <F> extends MineFlag
 	 * @param flag The MineFlag class to register, extend in your plugin.
 	 */
-	public static <F extends MineFlag> void addFlag(F flag) {
+	public static <F extends MineFlag> void registerFlag(F flag) {
 		manager.addFlag(flag);
+	}
+
+	/**
+	 * Add a DisplayStatistic the statistics can be displayed within placeholders, holograms, signs etc.
+	 * 
+	 * @param <D> extends DisplayStatistic
+	 * @param display The DisplayStatistic class to register, extend in your plugin.
+	 */
+	public static <D extends DisplayStatistic> void registerDisplay(D display) {
+		manager.addDisplay(display);
 	}
 
 }

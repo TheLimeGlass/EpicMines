@@ -61,6 +61,30 @@ flags:
     no-flag-found: "&cThere was no flag found named &l%input%&c."
     delay-info: "&eThe current delay for Mine %name% is &6%delay% seconds&e."
     flag-remove: "&cThe flag %flag% has been removed from Mine %name%"
+    air-set: "&aYou have set mine &l%mine%&a to only reset air. Keep in mind to remove this, remove the whole flag."
+    air-info: "&eSet air only is currently enabled."
+
+# All messages relating to the block signs.
+signs:
+    added-sign: "&aAdded sign for mine &l%mine%&a. With display %display% in category %category%."
+    no-mine: "&cThere was no mine found named &l%input%&c. Cancelling sign placement."
+    # Displays are custom aspects that allow plugin developers to extend what can be displayed within EpicMines.
+    # Can also be used to display different things in signs, holograms, etc.
+    displays:
+        reset:
+            text: "&eMine &l%mine%&e will reset in &l%seconds%&e seconds."
+            sign:
+                - "&4Mine &l%mine%"
+                - ""
+                - "&0Will reset in"
+                - "&0&l%seconds% &0seconds"
+        mined:
+            text: "&eMine &l%mine%&e has had %mined% blocks mined in it's mine."
+            sign:
+                - "&4Mine &l%mine%"
+                - ""
+                - "&0%mined% blocks"
+                - "&0broken in this mine"
 
 mines:
     no-mine-found: "&cThere was no mine found named &l%input%&c."
@@ -105,3 +129,18 @@ commands:
         description: "Force a mine to reset."
         syntax: "&c/em reset <mine>"
         reset: "&eYou have reset mine &l%mine%&e."
+    setteleport:
+        description: "Set teleport location of a Mine to where you are."
+        syntax: "&c/em setteleport <mine>"
+        set: "&eYou have just set the teleport location of mine &l%input%&e to your current location."
+    childern:
+        description: "View, add or remove childern from Mines."
+        syntax: "&c/em childern"
+        command:
+            - "&7Childern are mines that reset when the parent resets."
+            - "&7To manage childern on mines, the command is:"
+            - "   &e/em childern <mine> [add/remove <mine>]"
+            - "   &7Example: &8&o/em childern Mine1 add Mine2"
+        on-mine: "&eThe childern on mine &l%name%&e are &l%childern%&e. Type /em childern to view command syntax."
+        added: "&eYou added mine &l%child%&e as a child to mine &l%mine%&e."
+        removed: "&eYou removed mine &l%child%&e as a child from mine &l%mine%&e."

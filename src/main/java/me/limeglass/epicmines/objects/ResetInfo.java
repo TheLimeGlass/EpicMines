@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import me.limeglass.epicmines.EpicMines;
 import me.limeglass.epicmines.utils.CuboidRegion;
@@ -76,20 +78,24 @@ public class ResetInfo {
 			if (mine.getChunks().stream().allMatch(chunk -> !chunk.isLoaded()))
 				return;
 		}
-		CuboidRegion region = mine.getCuboidRegion();
-		mine.getPlayersWithin().forEach(player -> player.teleport(mine.getTeleport()));
-		List<BlockChance> probability = getProbabilityMap();
-		Iterator<Block> iterator = mine.getFlags().stream()
-				.map(reset -> reset.modify(region.min(), region.max()))
-				.filter(element -> element != null)
-				.findFirst()
-				.orElse(mine.iterator());
-		Consumer<Iterator<Block>> consumer = mine.getFlags().stream()
-				.map(reset -> reset.onReset(probability, mine))
-				.filter(element -> element != null)
-				.findFirst()
-				.orElse(getDefaultConsumer(probability));
-		consumer.accept(iterator);
+		Set<Mine> mines = Sets.newHashSet(mine.getChildern());
+		mines.add(mine);
+		mines.forEach(mine -> {
+			CuboidRegion region = mine.getCuboidRegion();
+			mine.getPlayersWithin().forEach(player -> player.teleport(mine.getTeleport()));
+			List<BlockChance> probability = getProbabilityMap();
+			Iterator<Block> iterator = mine.getFlags().stream()
+					.map(reset -> reset.modify(mine.getWorld(), region.min(), region.max()))
+					.filter(element -> element != null)
+					.findFirst()
+					.orElse(mine.iterator());
+			Consumer<Iterator<Block>> consumer = mine.getFlags().stream()
+					.map(reset -> reset.onReset(probability, mine))
+					.filter(element -> element != null)
+					.findFirst()
+					.orElse(getDefaultConsumer(probability));
+			consumer.accept(iterator);
+		});
 	}
 
 	public static class BlockChance {

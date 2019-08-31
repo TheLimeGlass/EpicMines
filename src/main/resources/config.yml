@@ -31,6 +31,11 @@ database:
         address: "localhost"
         name: "mines-example"
 
+# All configurations relating to the Mine signs.
+signs:
+    # The radius around a sign, if it's displaying the player statistics.
+    radius: 30
+
 general:
     # Unlocks all items to be used as Mine blocks. Keep in mind, if it's not placeable it will just be air, that's how Minecraft works.
     # If you think you can find a Material that isn't classified as a block under Spigot and can be placed, you can enable this and experiment.

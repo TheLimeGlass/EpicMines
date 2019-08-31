@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -28,12 +29,17 @@ import me.limeglass.epicmines.utils.MessageBuilder;
 public class Mine {
 
 	private final Set<MineFlag> flags = Sets.newHashSet(new DelayFlag());
+	private final MineStatistics statistics = new MineStatistics();
 	private final ResetInfo resetInfo = new ResetInfo(this);
+	private final Set<String> childern = new HashSet<>();
+	private final Set<MineSign> signs = new HashSet<>();
 	private final Set<Chunk> chunks = new HashSet<>();
 	private long update = System.currentTimeMillis();
-	private final Location pos1, pos2, teleport;
+	private final Location pos1, pos2;
 	private final CuboidRegion region;
 	private final String name;
+	private final World world;
+	private Location teleport;
 
 	public Mine(String name, Location pos1, Location pos2, Location teleport) {
 		this.region = new CuboidRegion(pos1, pos2);
@@ -42,11 +48,40 @@ public class Mine {
 		this.pos1 = pos1;
 		this.pos2 = pos2;
 		chunks.addAll(region.getChunks());
+		world = pos1.getWorld();
 	}
 
 	public void reset() {
 		update();
 		resetInfo.reset();
+	}
+
+	public void addChild(Mine child) {
+		childern.add(child.getName());
+	}
+
+	public void removeChild(Mine child) {
+		childern.removeIf(string -> string.equalsIgnoreCase(child.getName()));
+	}
+
+	public Set<Mine> getChildern() {
+		return EpicMines.getInstance().getManager(MineManager.class).getMines(childern);
+	}
+
+	public Set<Mine> getParents() {
+		return EpicMines.getInstance().getManager(MineManager.class).getMines().parallelStream()
+				.filter(mine -> !mine.getName().equalsIgnoreCase(name))
+				.filter(mine -> mine.getChildern().stream()
+						.anyMatch(child -> child.getName().equalsIgnoreCase(name)))
+				.collect(Collectors.toSet());
+	}
+
+	public World getWorld() {
+		return world;
+	}
+
+	public MineStatistics getStatistics() {
+		return statistics;
 	}
 
 	public void unload() {
@@ -69,6 +104,14 @@ public class Mine {
 		return resetInfo;
 	}
 
+	public void addSign(MineSign sign) {
+		signs.add(sign);
+	}
+
+	public Set<MineSign> getSigns() {
+		return signs;
+	}
+
 	public Set<? extends MineFlag> getFlags() {
 		return flags;
 	}
@@ -81,12 +124,16 @@ public class Mine {
 				.get();
 	}
 
+	public void setTeleport(Location teleport) {
+		this.teleport = teleport;
+	}
+
 	public Location getTeleport() {
 		return teleport;
 	}
 
 	public long getTimeLeft() {
-		return getDelayFlag().getSeconds() - ((System.currentTimeMillis() - update) / 1000);
+		return (getDelayFlag().getSeconds() - ((System.currentTimeMillis() - update) / 1000)) + 1;
 	}
 
 	public boolean hasFlag(FlagInfo<?> info) {

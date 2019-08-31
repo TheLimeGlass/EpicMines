@@ -14,9 +14,11 @@ import me.limeglass.epicmines.database.serializer.ItemStackSerializer;
 import me.limeglass.epicmines.database.serializer.LocationSerializer;
 import me.limeglass.epicmines.database.serializer.MineFlagSerializer;
 import me.limeglass.epicmines.database.serializer.MineSerializer;
+import me.limeglass.epicmines.database.serializer.MineSignSerializer;
 import me.limeglass.epicmines.database.serializer.MineStatisticsSerializer;
 import me.limeglass.epicmines.flags.MineFlag;
 import me.limeglass.epicmines.objects.Mine;
+import me.limeglass.epicmines.objects.MineSign;
 import me.limeglass.epicmines.objects.MineStatistics;
 import me.limeglass.epicmines.objects.MineStatistics.Enter;
 
@@ -30,6 +32,7 @@ public abstract class Database<T> {
 				.registerTypeAdapter(Enter.class, mineStatistics.new EnterSerializer())
 				.registerTypeAdapter(ItemStack.class, new ItemStackSerializer())
 				.registerTypeAdapter(MineFlag.class, new MineFlagSerializer())
+				.registerTypeAdapter(MineSign.class, new MineSignSerializer())
 				.registerTypeAdapter(Location.class, new LocationSerializer())
 				.registerTypeAdapter(Mine.class, new MineSerializer())
 				.registerTypeAdapter(MineStatistics.class, mineStatistics)

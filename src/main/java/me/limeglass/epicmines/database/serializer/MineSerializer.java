@@ -17,24 +17,18 @@ import com.google.gson.JsonSerializationContext;
 import me.limeglass.epicmines.database.Serializer;
 import me.limeglass.epicmines.flags.MineFlag;
 import me.limeglass.epicmines.objects.Mine;
+import me.limeglass.epicmines.objects.MineSign;
+import me.limeglass.epicmines.objects.MineStatistics;
 
 public class MineSerializer implements Serializer<Mine> {
-
-	private final MineFlagSerializer mineFlagSerializer;
-	private final LocationSerializer locationSerializer;
-
-	public MineSerializer() {
-		this.mineFlagSerializer = new MineFlagSerializer();
-		this.locationSerializer = new LocationSerializer();
-	}
 
 	@Override
 	public JsonElement serialize(Mine mine, Type type, JsonSerializationContext context) {
 		JsonObject object = new JsonObject();
 		object.addProperty("name", mine.getName());
-		object.add("pos1", locationSerializer.serialize(mine.getPosition1(), Location.class, context));
-		object.add("pos2", locationSerializer.serialize(mine.getPosition2(), Location.class, context));
-		object.add("teleport", locationSerializer.serialize(mine.getTeleport(), Location.class, context));
+		object.add("pos1", context.serialize(mine.getPosition1(), Location.class));
+		object.add("pos2", context.serialize(mine.getPosition2(), Location.class));
+		object.add("teleport", context.serialize(mine.getTeleport(), Location.class));
 		JsonArray blocks = new JsonArray();
 		for (Entry<Material, Double> entry : mine.getResetInfo().getRawValues().entrySet()) {
 			JsonObject chance = new JsonObject();
@@ -45,8 +39,13 @@ public class MineSerializer implements Serializer<Mine> {
 		object.add("blocks", blocks);
 		JsonArray flags = new JsonArray();
 		for (MineFlag flag : mine.getFlags())
-			blocks.add(mineFlagSerializer.serialize(flag, flag.getClass(), context));
+			blocks.add(context.serialize(flag, flag.getClass()));
 		object.add("flags", flags);
+		JsonArray signs = new JsonArray();
+		for (MineSign sign : mine.getSigns())
+			blocks.add(context.serialize(sign, MineSign.class));
+		object.add("signs", signs);
+		object.add("statistics", context.serialize(mine.getStatistics(), MineStatistics.class));
 		return object;
 	}
 
@@ -59,15 +58,15 @@ public class MineSerializer implements Serializer<Mine> {
 		JsonElement pos1Element = object.get("pos1");
 		if (pos1Element == null || pos1Element.isJsonNull())
 			return null;
-		Location pos1 = locationSerializer.deserialize(pos1Element, Location.class, context);
+		Location pos1 = context.deserialize(pos1Element, Location.class);
 		JsonElement pos2Element = object.get("pos2");
 		if (pos2Element == null || pos2Element.isJsonNull())
 			return null;
-		Location pos2 = locationSerializer.deserialize(pos2Element, Location.class, context);
+		Location pos2 = context.deserialize(pos2Element, Location.class);
 		JsonElement teleportElement = object.get("teleport");
 		if (teleportElement == null || teleportElement.isJsonNull())
 			return null;
-		Location teleport = locationSerializer.deserialize(teleportElement, Location.class, context);
+		Location teleport = context.deserialize(teleportElement, Location.class);
 		Mine mine = new Mine(name.getAsString(), pos1, pos2, teleport);
 		JsonElement blocksElement = object.get("blocks");
 		if (blocksElement != null && !blocksElement.isJsonNull() && blocksElement.isJsonArray()) {
@@ -87,15 +86,14 @@ public class MineSerializer implements Serializer<Mine> {
 		JsonElement flagsElement = object.get("flags");
 		if (flagsElement != null && !flagsElement.isJsonNull() && flagsElement.isJsonArray()) {
 			JsonArray array = flagsElement.getAsJsonArray();
-			array.forEach(element -> mine.getFlags().add(getMineFlag(element)));
+			array.forEach(element -> mine.getFlags().add(context.deserialize(element, MineFlag.class)));
+		}
+		JsonElement signsElement = object.get("signs");
+		if (signsElement != null && !signsElement.isJsonNull() && signsElement.isJsonArray()) {
+			JsonArray array = signsElement.getAsJsonArray();
+			array.forEach(element -> mine.addSign(context.deserialize(element, MineSign.class)));
 		}
 		return mine;
-	}
-
-	// Jank hacking mate.
-	@SuppressWarnings("unchecked")
-	public <F extends MineFlag> F getMineFlag(JsonElement element) {
-		return (F) mineFlagSerializer.deserialize(element, MineFlag.class, null);
 	}
 
 }

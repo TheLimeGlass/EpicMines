@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 import com.google.gson.JsonDeserializationContext;
@@ -73,10 +75,11 @@ public abstract class MineFlag implements Serializer<MineFlag> {
 	/**
 	 * Override to change the block iterator locations.
 	 * 
+	 * @param world The world of the Mine.
 	 * @param min Vector of the lowest point in the cuboid.
 	 * @param max Vector of the highest point in the cuboid.
 	 */
-	public Iterator<Block> modify(Vector min, Vector max) {
+	public Iterator<Block> modify(World world, Vector min, Vector max) {
 		return null;
 	}
 
@@ -96,6 +99,26 @@ public abstract class MineFlag implements Serializer<MineFlag> {
 	 * @param event BlockBreakEvent involved.
 	 */
 	public abstract void onMine(BlockBreakEvent event);
+
+	/**
+	 * Called when a player enters the Mine.
+	 * Override this, because it is called alot, be sure you use proper management.
+	 * 
+	 * @param event PlayerMoveEvent involved.
+	 */
+	public void onEnter(PlayerMoveEvent event) {
+		
+	}
+
+	/**
+	 * Called when a player leaves the Mine.
+	 * Override this, because it is called alot, be sure you use proper management.
+	 * 
+	 * @param event PlayerMoveEvent involved.
+	 */
+	public void onLeave(PlayerMoveEvent event) {
+		
+	}
 
 	/**
 	 * Called when a flag is added to a mine with the set arguments.

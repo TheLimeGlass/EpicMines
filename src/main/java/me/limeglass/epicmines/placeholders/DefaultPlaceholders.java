@@ -84,7 +84,7 @@ public class DefaultPlaceholders {
 				return Math.round(location.getX()) + ", " + Math.round(location.getY()) + ", " + Math.round(location.getZ());
 			}
 		});
-		Placeholders.registerPlaceholder(new Placeholder<Mine>("%name%") {
+		Placeholders.registerPlaceholder(new Placeholder<Mine>("%name%", "%mine%") {
 			@Override
 			public String replace(Mine mine) {
 				String name = mine.getName();
@@ -93,10 +93,28 @@ public class DefaultPlaceholders {
 				return name;
 			}
 		});
+		Placeholders.registerPlaceholder(new Placeholder<Mine>("%mined%") {
+			@Override
+			public String replace(Mine mine) {
+				return mine.getStatistics().getBlocksMined().size() + "";
+			}
+		});
 		Placeholders.registerPlaceholder(new Placeholder<Mine>("%flags%") {
 			@Override
 			public String replace(Mine mine) {
 				return new StringList(mine.getFlags().stream().map(flag -> flag.getName()).collect(Collectors.toSet())).toString();
+			}
+		});
+		Placeholders.registerPlaceholder(new Placeholder<Mine>("%childern%") {
+			@Override
+			public String replace(Mine mine) {
+				return new StringList(mine.getChildern().stream().map(child -> child.getName()).collect(Collectors.toSet())).toString();
+			}
+		});
+		Placeholders.registerPlaceholder(new Placeholder<Mine>("%parents%") {
+			@Override
+			public String replace(Mine mine) {
+				return new StringList(mine.getParents().stream().map(child -> child.getName()).collect(Collectors.toSet())).toString();
 			}
 		});
 		Placeholders.registerPlaceholder(new Placeholder<Mine>("%time%", "%delay%") {
