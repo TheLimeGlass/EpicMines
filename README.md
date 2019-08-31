@@ -15,9 +15,7 @@ The most epic plugin to manage and handle your prison mines!
 
 https://youtu.be/8eY-M6FW0MA
 
-
-
-Current issues:
+## Current issues:
 - MineSigns and MineFlags don't save properly.
 - AirFlag doesn't respect only air blocks. Ironic.
 - The time count down skips over a single number randomly, probably something with the calculations being too exact.
