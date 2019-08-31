@@ -12,3 +12,8 @@ The most epic plugin to manage and handle your prison mines!
 - Active and helpful team of developers.
 
 https://youtu.be/8eY-M6FW0MA
+
+
+Current issues:
+- MineSigns and MineFlags don't save properly.
+- The time count down skips over a single number randomly, probably something with the calculations being too exact.
