@@ -133,7 +133,7 @@ public class Mine {
 	}
 
 	public long getTimeLeft() {
-		return (getDelayFlag().getSeconds() - ((System.currentTimeMillis() - update) / 1000)) + 1;
+		return getDelayFlag().getSeconds() - ((System.currentTimeMillis() - update) / 1000);
 	}
 
 	public boolean hasFlag(FlagInfo<?> info) {

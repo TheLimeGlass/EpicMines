@@ -26,6 +26,8 @@ public class DelayFlag extends MineFlag {
 	// Already calculated within the getTimeLeft() method.
 	@Override
 	public boolean canReset(Mine mine) {
+		//TODO TEST this instead
+		//return mine.getLastUpdate() - System.currentTimeMillis() < (seconds * 1000);
 		return mine.getTimeLeft() <= 0;
 	}
 

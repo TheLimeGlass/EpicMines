@@ -39,11 +39,11 @@ public class MineSerializer implements Serializer<Mine> {
 		object.add("blocks", blocks);
 		JsonArray flags = new JsonArray();
 		for (MineFlag flag : mine.getFlags())
-			blocks.add(context.serialize(flag, flag.getClass()));
+			flags.add(context.serialize(flag, flag.getClass()));
 		object.add("flags", flags);
 		JsonArray signs = new JsonArray();
 		for (MineSign sign : mine.getSigns())
-			blocks.add(context.serialize(sign, MineSign.class));
+			signs.add(context.serialize(sign, MineSign.class));
 		object.add("signs", signs);
 		object.add("statistics", context.serialize(mine.getStatistics(), MineStatistics.class));
 		return object;
