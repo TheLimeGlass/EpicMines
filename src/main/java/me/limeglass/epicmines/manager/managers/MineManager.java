@@ -134,6 +134,10 @@ public class MineManager extends Manager {
 		return all;
 	}
 
+	public void deleteMine(Mine mine) {
+		database.delete(mine.getName());
+	}
+
 	public Optional<Mine> getMine(String name) {
 		Optional<Mine> optional = mines.stream()
 				.filter(mine -> mine.getName().equalsIgnoreCase(name))

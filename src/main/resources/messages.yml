@@ -150,5 +150,9 @@ commands:
         removed: "&eYou removed mine &l%child%&e as a child from mine &l%mine%&e."
     copy:
         description: "Copy a mine's flags, childern, and reset info to another mine."
-        syntax: "&c/em copy"
+        syntax: "&c/em copy <copy> <existing>"
         copied: "&eAll of mine %copy%'s data except locations has been copied to mine %mine%."
+    delete:
+        description: "Delete a mine."
+        syntax: "&c/em delete <mine>"
+        deleted: "&cYou have deleted mine &l%mine%&c."
