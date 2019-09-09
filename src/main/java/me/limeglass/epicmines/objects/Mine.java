@@ -51,6 +51,15 @@ public class Mine {
 		world = pos1.getWorld();
 	}
 
+	public void apply(Mine mine) {
+		flags.clear();
+		flags.addAll(mine.getFlags());
+		resetInfo.getRawValues().clear();
+		resetInfo.getRawValues().putAll(mine.getResetInfo().getRawValues());
+		childern.clear();
+		childern.addAll(mine.getChildern().stream().map(m -> m.getName()).collect(Collectors.toSet()));
+	}
+
 	public void reset() {
 		update();
 		resetInfo.reset();

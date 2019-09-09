@@ -9,6 +9,10 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.limeglass.epicmines.EpicMines;
+import me.limeglass.epicmines.flags.MineFlag.FlagInfo;
+import me.limeglass.epicmines.flags.PotionFlag;
+import me.limeglass.epicmines.manager.managers.MineManager;
 import me.limeglass.epicmines.manager.managers.SetupManager.Setup;
 import me.limeglass.epicmines.objects.Mine;
 import me.limeglass.epicmines.objects.StringList;
@@ -103,6 +107,18 @@ public class DefaultPlaceholders {
 			@Override
 			public String replace(Mine mine) {
 				return new StringList(mine.getFlags().stream().map(flag -> flag.getName()).collect(Collectors.toSet())).toString();
+			}
+		});
+		Placeholders.registerPlaceholder(new Placeholder<Mine>("%effects%") {
+			@Override
+			public String replace(Mine mine) {
+				Optional<FlagInfo<PotionFlag>> info = EpicMines.getInstance().getManager(MineManager.class).getFlagInfo(PotionFlag.class);
+				if (!info.isPresent())
+					return null;
+				Optional<PotionFlag> flag = mine.getFlag(info.get());
+				if (!flag.isPresent())
+					return null;
+				return new StringList(flag.get().getPotions().entrySet().stream().map(entry -> entry.getKey().getName() + ":" + entry.getValue()).collect(Collectors.toSet())).toString();
 			}
 		});
 		Placeholders.registerPlaceholder(new Placeholder<Mine>("%childern%") {

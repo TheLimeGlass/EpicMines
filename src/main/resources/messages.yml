@@ -44,7 +44,8 @@ setup:
     not-in-setup: "&cYou are currently not in a setup. Type &l/em setup &cto start."
 
 flags:
-    delay-error: "&cThe number &l%input% &cis not a valid number."
+    effect-error: "&cThe effect &l%input%&c is not a valid potion effect."
+    delay-error: "&cThe number &l%input%&c is not a valid number."
     delay-set: "&aYou have set the reset delay of this mine to &e%input% seconds&a."
     warning: "&eMine &6%name% &ewill reset in &l%timeleft% &eseconds!"
     warnings-set: "&aYou set the warnings at &e%warnings% &afor the mine &l%name%&a."
@@ -63,6 +64,9 @@ flags:
     flag-remove: "&cThe flag %flag% has been removed from Mine %name%"
     air-set: "&aYou have set mine &l%mine%&a to only reset air. Keep in mind to remove this, remove the whole flag."
     air-info: "&eSet air only is currently enabled."
+    effect-added: "&eYou have added potion effect &l%potion%&e with amplification &l%amp%&e"
+    effect-removed: "&eYou have removed all &l%potion%&e potion effects."
+    delay-info: "&eThe current effects on Mine %name% are &l%effects%&e."
 
 # All messages relating to the block signs.
 signs:
@@ -144,3 +148,7 @@ commands:
         on-mine: "&eThe childern on mine &l%name%&e are &l%childern%&e. Type /em childern to view command syntax."
         added: "&eYou added mine &l%child%&e as a child to mine &l%mine%&e."
         removed: "&eYou removed mine &l%child%&e as a child from mine &l%mine%&e."
+    copy:
+        description: "Copy a mine's flags, childern, and reset info to another mine."
+        syntax: "&c/em copy"
+        copied: "&eAll of mine %copy%'s data except locations has been copied to mine %mine%."
